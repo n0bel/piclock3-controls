@@ -66,8 +66,7 @@ gpio works, named in the `dtoverlay=` line below.
 
 ## Installing
 
-Needs a PiClock3 that knows `services:`, from October 2026 on.  Then, on
-the Pi:
+Needs PiClock3 2026.10.09 or later.  Then, on the Pi:
 
 ```
 cd ~/PiClock3
