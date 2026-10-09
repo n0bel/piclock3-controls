@@ -12,8 +12,8 @@ config that names no buttons claims no pins, and one with no `remote:`
 leaves the receiver alone.  It's
 [issue #43](https://github.com/n0bel/PiClock3/issues/43) of PiClock3.
 
-Both work, on a Pi 4 with Raspberry Pi OS Bookworm.  The buttons were
-tested with a wire to ground in place of a button.
+Both work, on a Pi 4 with Raspberry Pi OS Bookworm, and the buttons on a
+Pi 3 with Trixie.
 
 ## What a button can do
 
@@ -113,12 +113,16 @@ remote:`.
 
 If nothing prints, the kernel isn't decoding that remote's protocol.  At
 boot it decodes only rc-6, the protocol of a Windows Media Center remote.
-This turns on the rest, until the next reboot, and `learn.py` prints the
-command for your receiver:
+This turns on the rest, until the next reboot:
 
 ```
 sudo ir-keytable -s rc2 -p all
 ```
+
+`rc2` is the receiver on a Pi 4.  The number is the order the Pi's remote
+devices were found in, and HDMI takes the first ones: on a Pi 3 the
+receiver is `rc1`.  `learn.py` prints the command with the right one, and
+`ir-keytable` with nothing after it lists each device with its driver.
 
 Once `learn.py` has shown your remote's protocol, the start of each line,
 turn on just that one.  With every protocol on, some read stray noise as a
