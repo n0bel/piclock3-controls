@@ -10,7 +10,8 @@ Which pin or which remote button does what is written in the clock's
 config, and nothing has to be compiled.  It's
 [issue #43](https://github.com/n0bel/PiClock3/issues/43) of PiClock3.
 
-Both work, on a Pi 4 with Raspberry Pi OS Bookworm.
+Both work, on a Pi 4 with Raspberry Pi OS Bookworm.  The buttons were
+tested with a wire to ground in place of a button.
 
 ## What a button can do
 
@@ -26,33 +27,6 @@ Both work, on a Pi 4 with Raspberry Pi OS Bookworm.
 The slideshow ones act on the slideshow of the page being looked at, the
 way the keys do.  An action is a call on the clock rather than a key
 press, so it works whichever window has the focus.
-
-## Naming it in a config
-
-It's a service: it draws nothing, so it goes under `services:` and takes no
-region.
-
-```yaml
-services:
-  controls:
-    plugin: plugins.Controls
-    buttons:
-      gpio-23: next-page
-      gpio-24: previous-page
-      gpio-25: slideshow-hold
-    remote:
-      rc6_mce-0x800f0422: next-page
-      rc6_mce-0x800f040e: previous-page
-```
-
-| setting | |
-|---|---|
-| `buttons` | a pin, as `gpio-25` for GPIO25 or `pin-22` for header pin 22, which is the same one, and what each does |
-| `remote` | a button as `learn.py` prints it, and what it does |
-| `remote-device` | the driver of the IR receiver.  `gpio_ir_recv` is the one the overlay below makes |
-| `bounce` | seconds a button is ignored after a press, 0.05 |
-
-`examples/controls.yaml` is a clock of two pages with these in it.
 
 ## Wiring
 
@@ -126,7 +100,45 @@ command for your receiver:
 sudo ir-keytable -s rc2 -p all
 ```
 
-Planned: keeping the other protocols on across a reboot.
+Once `learn.py` has shown your remote's protocol, the start of each line,
+turn on just that one.  With every protocol on, some read stray noise as a
+button, and the log fills with buttons nobody pressed:
+
+```
+sudo ir-keytable -s rc2 -p nec
+```
+
+`ir-keytable -s rc2` lists the names `-p` takes, which differ a little
+from what `learn.py` prints: `rc6_mce` is `rc-6`, and `rc5` is `rc-5`.
+
+Planned: keeping the protocol on across a reboot.
+
+## Naming it in a config
+
+It's a service: it draws nothing, so it goes under `services:` and takes no
+region.
+
+```yaml
+services:
+  controls:
+    plugin: plugins.Controls
+    buttons:
+      gpio-23: next-page
+      gpio-24: previous-page
+      gpio-25: slideshow-hold
+    remote:
+      rc6_mce-0x800f0422: next-page
+      rc6_mce-0x800f040e: previous-page
+```
+
+| setting | |
+|---|---|
+| `buttons` | a pin, as `gpio-25` for GPIO25 or `pin-22` for header pin 22, which is the same one, and what each does |
+| `remote` | a button as `learn.py` prints it, and what it does |
+| `remote-device` | the driver of the IR receiver.  `gpio_ir_recv` is the one the overlay above makes |
+| `bounce` | seconds a button is ignored after a press, 0.05 |
+
+`examples/controls.yaml` is a clock of two pages with these in it.
 
 ## Without this plugin
 
