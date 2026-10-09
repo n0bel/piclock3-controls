@@ -40,6 +40,9 @@ holds it high the rest of the time.
     GPIO25   22           slideshow-hold
     ground   20           shared by all three
 
+![Three push buttons on pins 16, 18 and 22, with pin 20 as their shared
+ground](images/buttons.svg)
+
 A header pin that isn't a gpio, such as `pin-25`, which is ground, is
 refused, and the log says which one.
 
@@ -50,6 +53,9 @@ legs are output, ground and power, left to right:
     right, power     pin 1, 3.3V
     middle, ground   pin 9, ground
     left, output     pin 12, GPIO18
+
+![A TSOP4838 with its output on pin 12, ground on pin 9 and power on pin
+1](images/receiver.svg)
 
 GPIO18 is where the kernel's receiver listens unless told otherwise.  Any
 gpio works, named in the `dtoverlay=` line below.
