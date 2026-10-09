@@ -7,7 +7,9 @@ on the clock: turn the page, turn it back, quit, or step or hold the
 slideshow.
 
 Which pin or which remote button does what is written in the clock's
-config, and nothing has to be compiled.  It's
+config, and nothing has to be compiled.  Use either one, or both.  A
+config that names no buttons claims no pins, and one with no `remote:`
+leaves the receiver alone.  It's
 [issue #43](https://github.com/n0bel/PiClock3/issues/43) of PiClock3.
 
 Both work, on a Pi 4 with Raspberry Pi OS Bookworm.  The buttons were
@@ -29,6 +31,8 @@ way the keys do.  An action is a call on the clock rather than a key
 press, so it works whichever window has the focus.
 
 ## Wiring
+
+Wire whichever you mean to use.
 
 **Buttons.**  These are the pins PiClock v1 used.  Each button connects
 its gpio pin to ground when pressed.  No resistor: the pin's own pull-up
@@ -68,11 +72,16 @@ the Pi:
 ```
 cd ~/PiClock3
 git clone https://github.com/n0bel/piclock3-controls plugins/Controls
-sudo apt install python3-gpiozero ir-keytable
 ```
 
-gpiozero comes with Raspberry Pi OS, so apt usually has nothing to do for
-it.  The remote also needs the kernel's receiver turned on, with a line in
+**For the buttons,** gpiozero.  It comes with Raspberry Pi OS, so apt
+usually has nothing to do:
+
+```
+sudo apt install python3-gpiozero
+```
+
+**For the remote,** the kernel's receiver turned on, with a line in
 `/boot/firmware/config.txt` (`/boot/config.txt` on Bullseye), and a
 reboot:
 
@@ -80,7 +89,13 @@ reboot:
 dtoverlay=gpio-ir,gpio_pin=18
 ```
 
-The kernel decodes the remote itself, so lirc isn't needed.
+The kernel decodes the remote itself, so lirc isn't needed.  ir-keytable
+turns on the protocols the kernel leaves off at boot, which comes up
+below:
+
+```
+sudo apt install ir-keytable
+```
 
 **Finding your remote's buttons.**  Run `learn.py` and press each button
 you want.  It prints each one the way `remote:` writes it:
