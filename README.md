@@ -20,7 +20,7 @@ tested with a wire to ground in place of a button.
 | action | the key it matches |
 |---|---|
 | `next-page` | Space |
-| `previous-page` | none |
+| `previous-page` | Backspace, or Shift+Space |
 | `quit` | F4 |
 | `slideshow-back` | F6 |
 | `slideshow-forward` | F7 |
@@ -168,14 +168,15 @@ is what v1's `gpio-keys` program did.  One line per button in
 
 ```
 dtoverlay=gpio-key,gpio=23,keycode=57,label="next page"
-dtoverlay=gpio-key,gpio=24,keycode=64,label="slideshow back"
+dtoverlay=gpio-key,gpio=24,keycode=14,label="previous page"
 dtoverlay=gpio-key,gpio=25,keycode=66,label="slideshow hold"
 ```
 
-The keycodes are Linux's: 57 is Space, 62 F4, 64 F6, 65 F7 and 66 F8.  A
-key press reaches the clock the way a keyboard's does.  No key turns a page
-back, and what each button does lives in `config.txt` rather than the
-clock's config, where `--check` can't see it.
+The keycodes are Linux's: 57 is Space, 14 Backspace, 62 F4, 64 F6, 65 F7
+and 66 F8.  A key press reaches the clock the way a keyboard's does.
+Backspace needs PiClock3 2026.10.09.2 or later.  What each button does
+lives in `config.txt` rather than the clock's config, where `--check`
+can't see it.
 
 ## License
 
