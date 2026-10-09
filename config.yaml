@@ -1,0 +1,12 @@
+kind: controls
+
+# empty, so nothing claims a pin until a config says which ones are wired
+buttons: {}
+
+remote: {}
+
+# the driver the gpio-ir overlay loads
+remote-device: gpio_ir_recv
+
+# a cheap push button rattles for a few milliseconds when pressed
+bounce: 0.05

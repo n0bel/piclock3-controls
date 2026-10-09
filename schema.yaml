@@ -1,0 +1,36 @@
+description: >
+  Push buttons on the gpio pins and an infrared remote, each button doing
+  one of the things a key does on the clock.
+
+service: true
+
+types:
+
+  action:
+    is: scalar
+    one-of: [next-page, previous-page, quit, slideshow-back,
+             slideshow-forward, slideshow-hold]
+    help: What a button does.  The slideshow ones act on the slideshow of
+      the page being looked at.
+
+settings:
+
+  buttons:
+    is: table
+    of: action
+    help: Push buttons, each wired from its pin to ground, and what each
+      does.  A pin is gpio-25 for GPIO25 or pin-22 for header pin 22.
+  remote:
+    is: table
+    of: action
+    help: Remote buttons as learn.py prints them, such as
+      rc6_mce-0x800f0422, and what each does.
+  remote-device:
+    is: string
+    help: The driver of the IR receiver.  Empty leaves the remote alone.
+  bounce:
+    is: number
+    unit: seconds
+    range: [0, 1]
+    help: How long a button is ignored after a press, so one press is
+      not read as several.

@@ -1,0 +1,66 @@
+# A clock of two pages with buttons to turn them, run by naming it from
+# the top of a PiClock3 checkout:
+#
+#   python3 PyQtPiClock3.py plugins/Controls/examples/controls.yaml
+
+pages:
+  clock-page: {order: 0, layout: classic, theme: circuit}
+  wall-page:  {order: 1, layout: clockwall, theme: clockwall}
+
+language: en
+
+location:
+  latitude: 45
+  longitude: -93
+  timezone:
+
+# none of these needs a key, so this runs on a fresh clone with no
+# ApiKeys.yaml at all
+providers:
+  openmeteo: {plugin: PiClock3.OpenMeteo}
+  metar:     {plugin: PiClock3.Metar, METAR: KMSP}
+
+widgets:
+  clock: {plugin: PiClock3.AnalogClock, region: clock}
+  date:  {plugin: PiClock3.Date, region: date}
+
+  forecast:
+    plugin: PiClock3.Forecast
+    region: forecast
+    forecast-provider: openmeteo
+
+  current-conditions:
+    plugin: PiClock3.CurrentConditions
+    region: current
+    conditions-provider: metar
+
+  # the second page: a region belongs to one layout, so it has a layout
+  # of its own
+  city1:  {plugin: PiClock3.Text, region: city1, text: Minneapolis}
+  clock1: {plugin: PiClock3.AnalogClock, region: clock1}
+  day1:   {plugin: PiClock3.Date, region: day1}
+
+  city2:  {plugin: PiClock3.Text, region: city2, text: London}
+  clock2: {plugin: PiClock3.AnalogClock, region: clock2,
+           timezone: Europe/London}
+  day2:   {plugin: PiClock3.Date, region: day2, timezone: Europe/London}
+
+  city3:  {plugin: PiClock3.Text, region: city3, text: Tokyo}
+  clock3: {plugin: PiClock3.AnalogClock, region: clock3,
+           timezone: Asia/Tokyo}
+  day3:   {plugin: PiClock3.Date, region: day3, timezone: Asia/Tokyo}
+
+services:
+  controls:
+    plugin: plugins.Controls
+    # the pins PiClock v1 used, each wired to ground through a button
+    buttons:
+      gpio-23: next-page
+      gpio-24: previous-page
+      gpio-25: slideshow-hold
+    # each button as learn.py prints it
+    remote:
+      rc6_mce-0x800f0422: next-page
+      rc6_mce-0x800f040e: previous-page
+
+logging-level: info
